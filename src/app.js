@@ -2,20 +2,19 @@ class IndecisionApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      
-    }
+      options: ['One', 'Two', 'Three', 4]
+    };
   }
   render() {
     const title = 'Indecision';
     const subtitle = 'Put your life in hands of a computer.';
-    const options = ['One', 'Two', 'Three', 4];
 
     return (  
       <div>
         <Header title={title} subtitle={subtitle}/>
-        <Action />
-        <Options options={options}/>
-        <AddOption options={options} />
+        <Action hasOptions={this.state.options.length > 0} />
+        <Options options={this.state.options}/>
+        <AddOption options={this.state.options} />
       </div>
     );
   }
@@ -36,7 +35,7 @@ class Action extends React.Component {
   render() {
     return (
       <div>
-        <button>What should I do?</button>
+        <button disabled={!this.props.hasOptions}>What should I do?</button>
       </div>
     );
   }
@@ -46,9 +45,16 @@ class Options extends React.Component {
   constructor(props) {
     super(props);
     this.onRemoveAll = this.onRemoveAll.bind(this);
+    this.state = {
+      options: this.props.options
+    }
   }
   onRemoveAll() {
-    // this.props.options = [];
+    this.setState((obj) => {
+      return {
+        options: []
+      }
+    })
     alert('All options removed.');
   }
   render() {
@@ -56,7 +62,7 @@ class Options extends React.Component {
       <div>
         <button onClick={this.onRemoveAll}>Remove All</button>
         {
-          this.props.options.map((option) => <Option key={option} optionText={option}/>)
+          this.state.options.map((option) => <Option key={option} optionText={option}/>)
         }
       </div>
     );
@@ -74,12 +80,22 @@ class Option extends React.Component {
 }
 
 class AddOption extends React.Component {
+  constructor(props) {
+    super(props);
+    this.onAddOption = this.onAddOption.bind(this);
+    this.state = {
+      options: this.props.options
+    };
+  }
   onAddOption(e) {
     e.preventDefault();
     const option = e.target.elements.option.value.trim();
     if (option) {
-      // this.props.options.push(option);
-      alert(option);
+      this.setState(() => {
+        return (
+          this.props.options.push(option)
+        );
+      });
     }
   }
   render() {
