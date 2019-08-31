@@ -1,19 +1,32 @@
 class IndecisionApp extends React.Component {
   constructor(props) {
     super(props);
+    this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
+    this.handlePick = this.handlePick.bind(this);
     this.state = {
       options: ['One', 'Two', 'Three', 4]
     };
   }
+  handleDeleteOptions() {
+    this.setState(() => {
+      return {
+        options: []
+      };
+    });
+  }
+  handlePick() {
+    const randomNumber = Math.floor(Math.random() * this.state.options.length)
+    const option = this.state.options[randomNumber];
+    alert(option)
+  }
   render() {
     const title = 'Indecision';
     const subtitle = 'Put your life in hands of a computer.';
-
     return (  
       <div>
         <Header title={title} subtitle={subtitle}/>
-        <Action hasOptions={this.state.options.length > 0} />
-        <Options options={this.state.options}/>
+        <Action hasOptions={this.state.options.length > 0} handlePick={this.handlePick} />
+        <Options options={this.state.options} handleDeleteOptions={this.handleDeleteOptions} />
         <AddOption options={this.state.options} />
       </div>
     );
@@ -35,34 +48,19 @@ class Action extends React.Component {
   render() {
     return (
       <div>
-        <button disabled={!this.props.hasOptions}>What should I do?</button>
+        <button disabled={!this.props.hasOptions} onClick={this.props.handlePick}>What should I do?</button>
       </div>
     );
   }
 }
 
 class Options extends React.Component {
-  constructor(props) {
-    super(props);
-    this.onRemoveAll = this.onRemoveAll.bind(this);
-    this.state = {
-      options: this.props.options
-    }
-  }
-  onRemoveAll() {
-    this.setState((obj) => {
-      return {
-        options: []
-      }
-    })
-    alert('All options removed.');
-  }
   render() {
     return (
       <div>
-        <button onClick={this.onRemoveAll}>Remove All</button>
+        <button onClick={this.props.handleDeleteOptions}>Remove All</button>
         {
-          this.state.options.map((option) => <Option key={option} optionText={option}/>)
+          this.props.options.map((option) => <Option key={option} optionText={option}/>)
         }
       </div>
     );
@@ -84,7 +82,7 @@ class AddOption extends React.Component {
     super(props);
     this.onAddOption = this.onAddOption.bind(this);
     this.state = {
-      options: this.props.options
+      // options: this.props.options
     };
   }
   onAddOption(e) {
@@ -93,7 +91,8 @@ class AddOption extends React.Component {
     if (option) {
       this.setState(() => {
         return (
-          this.props.options.push(option)
+          // this.props.options.push(option)
+          console.log('')
         );
       });
     }
@@ -105,7 +104,6 @@ class AddOption extends React.Component {
           <input type='text' name='option'></input>
           <button>Add Option</button>
         </form>
-        <button onClick={this.onAddOption}>Add Option</button>
       </div>
     );
   }
