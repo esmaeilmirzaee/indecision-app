@@ -18,9 +18,14 @@ class IndecisionApp extends React.Component {
     this.setState(() => ({options: []}));
   }
   handlePick() {
-    const randomNumber = Math.floor(Math.random() * this.state.options.length)
+    let preRandomNumber = 0;
+    let randomNumber = 0;
+    do {
+      randomNumber = Math.floor(Math.random() * this.state.options.length);
+    } while (preRandomNumber != randomNumber);
+    preRandomNumber = randomNumber;
     const option = this.state.options[randomNumber];
-    alert(option)
+    alert(option);
   }
   handleAddOption(option) {
     if (!option) {

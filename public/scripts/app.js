@@ -41,7 +41,12 @@ var IndecisionApp = function (_React$Component) {
   }, {
     key: 'handlePick',
     value: function handlePick() {
-      var randomNumber = Math.floor(Math.random() * this.state.options.length);
+      var preRandomNumber = 0;
+      var randomNumber = 0;
+      do {
+        randomNumber = Math.floor(Math.random() * this.state.options.length);
+      } while (preRandomNumber != randomNumber);
+      preRandomNumber = randomNumber;
       var option = this.state.options[randomNumber];
       alert(option);
     }
